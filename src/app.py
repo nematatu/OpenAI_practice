@@ -3,7 +3,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import os
 from dotenv import load_dotenv
-from flask import Flask,url_for
+from flask import Flask,url_for, request
 load_dotenv()
 
 api_ky = os.environ["OPENAI_API_KEY"]
@@ -47,9 +47,12 @@ def test():
 def index():
     return 'index'
 
-@app.route('/login')
+@app.route('/login',methods=['GET','POST'])
 def login():
-    return 'login'
+    if request.method == 'POST':
+        return 'do_the_login'
+    else:
+        return 'show_the_login_form'
 
 @app.route('/user/<username>')
 def profile(username):
@@ -58,5 +61,4 @@ def profile(username):
 with app.test_request_context():
     print(url_for('index'))
     print(url_for('login'))
-    print(url_for('login', next='/'))
     print(url_for('profile', username='John Doe'))
