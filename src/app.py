@@ -118,3 +118,8 @@ def upload_file():
 @app.route("/gotohello")
 def tohello():
     return redirect(url_for("hello"))
+
+@app.errorhandler(404)
+def not_found(error):
+    resp=make_response(render_template("error.html"), 404)
+    return resp
