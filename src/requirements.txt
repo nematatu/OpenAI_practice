@@ -1,4 +1,4 @@
 spotipy
 openai
-black
 python-dotenv
+flask
