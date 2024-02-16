@@ -3,7 +3,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import os
 from dotenv import load_dotenv
-from flask import Flask, url_for, request, render_template,make_response, redirect,abort
+from flask import Flask, url_for, request, render_template,make_response, redirect,abort,session
 
 load_dotenv()
 
@@ -78,9 +78,10 @@ def log_the_user_in(username):
 @app.route("/hello/")
 def hello():
     username = None
-    if request.cookies.get("username"):
-        username=request.cookies.get("username")
-
+    # if request.cookies.get("username"):
+    #     username=request.cookies.get("username")
+    if 'username' in session:
+        username = session['username']
     return render_template("hello.html", name=username)
 
 
@@ -96,15 +97,20 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         if username and password:
-            response=make_response(render_template("result.html", username=username))
-            response.set_cookie("username", username)
-            return response
+            # response=make_response(render_template("result.html", username=username))
+            # response.set_cookie("username", username)
+            session['username']=username
+            return render_template("result.html", username=username)
         else:
             return render_template("result.html", error="Invalid username/password")
     elif request.method == "GET":
         return "getだ〜"
     # return render_template('result.html',error=error)
 
+@app.route("/logout")
+def logout():
+    session.pop("username", None)
+    return redirect(url_for("hello"))
 
 @app.route("/upload", methods=["GET", "POST"])
 def upload_file():
@@ -123,3 +129,6 @@ def tohello():
 def not_found(error):
     resp=make_response(render_template("error.html"), 404)
     return resp
+
+app.secret_key="A0Zr98j/3yX R~XHH!jmN]LWX/,?RT"
+
