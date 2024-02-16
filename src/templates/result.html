@@ -1,4 +1,8 @@
 <!doctype html>
 <title>Result</title>
 <h1>Result</h1>
-<p>{{ result }}</p>
+{% if error %}
+    <p>{{ error }}</p>
+{%else%}
+    <p>Hi, {{ username }}!!</p>
+{%endif%}
