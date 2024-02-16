@@ -3,7 +3,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import os
 from dotenv import load_dotenv
-from flask import Flask, url_for, request, render_template
+from flask import Flask, url_for, request, render_template,make_response
 
 load_dotenv()
 
@@ -17,8 +17,6 @@ client_credentials_manager = spotipy.oauth2.SpotifyClientCredentials(
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 client = OpenAI(api_key=api_ky)
-
-print("hello")
 
 app = Flask(__name__)
 
@@ -78,9 +76,12 @@ def log_the_user_in(username):
 
 
 @app.route("/hello/")
-@app.route("/hello/<name>")
-def hello(name=None):
-    return render_template("hello.html", name=name)
+def hello():
+    username = None
+    if request.cookies.get("username"):
+        username=request.cookies.get("username")
+
+    return render_template("hello.html", name=username)
 
 
 with app.test_request_context("/hello", method="POST"):
@@ -95,18 +96,21 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         if username and password:
-            return render_template("result.html", error=error, username=username)
+            response=make_response(render_template("result.html", username=username))
+            response.set_cookie("username", username)
+            return response
         else:
             return render_template("result.html", error="Invalid username/password")
     elif request.method == "GET":
         return "getだ〜"
     # return render_template('result.html',error=error)
 
-@app.route("/upload",methods=["GET","POST"])
+
+@app.route("/upload", methods=["GET", "POST"])
 def upload_file():
-    if request.method=="POST":
-        if 'file' not in request.files:
+    if request.method == "POST":
+        if "file" not in request.files:
             return "no file part"
-        f=request.files["file"]
+        f = request.files["file"]
         f.save(f.filename)
         return "upload success"
