@@ -101,3 +101,12 @@ def login():
     elif request.method == "GET":
         return "getだ〜"
     # return render_template('result.html',error=error)
+
+@app.route("/upload",methods=["GET","POST"])
+def upload_file():
+    if request.method=="POST":
+        if 'file' not in request.files:
+            return "no file part"
+        f=request.files["file"]
+        f.save(f.filename)
+        return "upload success"
