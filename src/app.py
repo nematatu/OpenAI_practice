@@ -23,7 +23,7 @@ app=Flask(__name__)
 def hello_world():
     return "<p>Hello, World!<p>"
 
-@app.route("/test/int/<int:num>")
+@app.route("/test/int/<int:num>/")
 def int(num):
     return f"your num is, {(num)}"
 
