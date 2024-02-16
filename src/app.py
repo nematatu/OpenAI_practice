@@ -3,7 +3,17 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import os
 from dotenv import load_dotenv
-from flask import Flask, url_for, request, render_template,make_response, redirect,abort,session
+from flask import (
+    Flask,
+    url_for,
+    request,
+    render_template,
+    make_response,
+    redirect,
+    abort,
+    session,
+    flash,
+)
 
 load_dotenv()
 
@@ -22,8 +32,8 @@ app = Flask(__name__)
 
 
 @app.route("/")
-def hello_world():
-    return "<p>Hello, World!<p>"
+def index():
+    return render_template('index.html')
 
 
 @app.route("/test/int/<int:num>/")
@@ -50,12 +60,6 @@ def string(name):
 def test():
     return "<p>test<p>"
 
-
-@app.route("/urlfor")
-def index():
-    return "index"
-
-
 @app.route("/user/<username>")
 def profile(username):
     return f"{username}'s profile"
@@ -80,8 +84,8 @@ def hello():
     username = None
     # if request.cookies.get("username"):
     #     username=request.cookies.get("username")
-    if 'username' in session:
-        username = session['username']
+    if "username" in session:
+        username = session["username"]
     return render_template("hello.html", name=username)
 
 
@@ -99,18 +103,21 @@ def login():
         if username and password:
             # response=make_response(render_template("result.html", username=username))
             # response.set_cookie("username", username)
-            session['username']=username
-            return render_template("result.html", username=username)
+            session["username"] = username
+            flash("You were successfully logged in")
+            return redirect(url_for("index"))
         else:
             return render_template("result.html", error="Invalid username/password")
     elif request.method == "GET":
         return "getだ〜"
     # return render_template('result.html',error=error)
 
+
 @app.route("/logout")
 def logout():
     session.pop("username", None)
     return redirect(url_for("hello"))
+
 
 @app.route("/upload", methods=["GET", "POST"])
 def upload_file():
@@ -121,14 +128,16 @@ def upload_file():
         f.save(f.filename)
         return "upload success"
 
+
 @app.route("/gotohello")
 def tohello():
     return redirect(url_for("hello"))
 
+
 @app.errorhandler(404)
 def not_found(error):
-    resp=make_response(render_template("error.html"), 404)
+    resp = make_response(render_template("error.html"), 404)
     return resp
 
-app.secret_key="A0Zr98j/3yX R~XHH!jmN]LWX/,?RT"
 
+app.secret_key = "A0Zr98j/3yX R~XHH!jmN]LWX/,?RT"
