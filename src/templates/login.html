@@ -1,5 +1,5 @@
-<!doctype html>
-<title>Hello flask</title>
+<!DOCTYPE html>
+<title>login page</title>
 <form action="/login" method="post">
     <label for="username">Username:</label><br>
     <input type="text" id="username" name="username"><br>
@@ -7,9 +7,3 @@
     <input type="password" id="password" name="password"><br>
     <input type="submit" value="Submit">
 </form>
-<a href="/login">go to login</a>
-{% if name%}
-<h1>Hello {{name}}!</h1>
-{%else%}
-<h1>Hello, world!</h1>
-{%endif%}

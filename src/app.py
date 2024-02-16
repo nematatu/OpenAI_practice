@@ -47,21 +47,19 @@ def test():
 def index():
     return 'index'
 
-@app.route('/login',methods=['GET','POST'])
-def login():
-    if request.method == 'POST':
-        return 'do_the_login'
-    else:
-        return 'show_the_login_form'
-
 @app.route('/user/<username>')
 def profile(username):
     return f'{username}\'s profile'
 
 with app.test_request_context():
     print(url_for('index'))
-    print(url_for('login'))
-    print(url_for('profile', username='John Doe'))
+def valid_login(username, password):
+    # ユーザー名とパスワードの検証ロジックをここに書く
+    pass
+
+def log_the_user_in(username):
+    # ユーザーをログインさせるロジックをここに書く
+    pass 
 
 @app.route('/hello/')
 @app.route('/hello/<name>')
@@ -71,3 +69,11 @@ def hello(name=None):
 with app.test_request_context('/hello',method='POST'):
     assert request.path == '/hello'
     assert request.method == 'POST'
+
+@app.route('/login',methods=['GET','POST'])
+def login():
+    if request.method=="POST":
+        return "postだ〜"
+    elif request.method=="GET":
+        return "getだ〜"
+    #return render_template('result.html',error=error)
