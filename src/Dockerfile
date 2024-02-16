@@ -42,6 +42,7 @@ USER appuser
 # Copy the source code into the container.
 COPY . .
 # Expose the port that the application listens on.
-EXPOSE 8000
+EXPOSE 5005
 
+CMD flask run --port=5005 --host=0.0.0.0 --debugger --reload
 # Run the application.
