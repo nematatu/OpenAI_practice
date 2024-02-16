@@ -3,7 +3,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import os
 from dotenv import load_dotenv
-from flask import Flask, url_for, request, render_template,make_response
+from flask import Flask, url_for, request, render_template,make_response, redirect,abort
 
 load_dotenv()
 
@@ -114,3 +114,7 @@ def upload_file():
         f = request.files["file"]
         f.save(f.filename)
         return "upload success"
+
+@app.route("/gotohello")
+def tohello():
+    return redirect(url_for("hello"))
