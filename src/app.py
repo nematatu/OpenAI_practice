@@ -3,7 +3,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import os
 from dotenv import load_dotenv
-from flask import Flask,url_for, request
+from flask import Flask,url_for, request,render_template
 load_dotenv()
 
 api_ky = os.environ["OPENAI_API_KEY"]
@@ -62,3 +62,8 @@ with app.test_request_context():
     print(url_for('index'))
     print(url_for('login'))
     print(url_for('profile', username='John Doe'))
+
+@app.route('/hello/')
+@app.route('/hello/<name>')
+def hello(name=None):
+    return render_template('hello.html', name=name)
