@@ -43,7 +43,7 @@ USER appuser
 COPY . .
 # Expose the port that the application listens on.
 EXPOSE 5005
-ENV FLASK_APP=./practice
+ENV FLASK_APP=./practice/practice.py
 
 CMD flask run --port=5005 --host=0.0.0.0 --debugger --reload
 # Run the application.
