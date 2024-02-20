@@ -1,5 +1,8 @@
 import os
 from flask import Flask
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def create_app(test_config=None):
     app=Flask(__name__,instance_relative_config=True)
@@ -27,4 +30,6 @@ def create_app(test_config=None):
     app.register_blueprint(blog.bp)
     app.add_url_rule("/",endpoint="index")
 
+    def load_config(key):
+        app.config[key]=os.environ[key]
     return app

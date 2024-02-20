@@ -2,4 +2,4 @@ spotipy
 openai
 python-dotenv
 flask
-flask-dance
+flask-danc
