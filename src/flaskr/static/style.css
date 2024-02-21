@@ -139,7 +139,7 @@ input[type=submit] {
 .oauth__button {
     font-size: 13px;
     font-weight: bold;
-    color: white;
+    color: black;
     height: 45px;
     text-align: center;
     display: block;

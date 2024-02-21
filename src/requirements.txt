@@ -2,4 +2,5 @@ spotipy
 openai
 python-dotenv
 flask
-flask-danc
+requests
+requests-oauthlib

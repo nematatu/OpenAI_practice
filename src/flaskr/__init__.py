@@ -6,6 +6,8 @@ load_dotenv()
 
 def create_app(test_config=None):
     app=Flask(__name__,instance_relative_config=True)
+    app.json.ensure_ascii=False
+    
     app.config.from_mapping(
         SECRET_KEY="dev",
         DATABASE=os.path.join(app.instance_path,"flaskr.sqlite")
@@ -32,4 +34,8 @@ def create_app(test_config=None):
 
     def load_config(key):
         app.config[key]=os.environ[key]
+
+    load_config("TW_CLI_KEY")
+    load_config("TW_SCR_KEY")
+    
     return app

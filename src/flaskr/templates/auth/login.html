@@ -15,14 +15,9 @@
 
 <div class="oauth">
     <h2>Use OAuth</h2>
-    <a class="oauth__button oauth_button_twitter" href="{{url_for('twitter.login')}}">
+    <a class="oauth__button oauth_button_twitter" href="{{url_for('auth.twitter_login')}}">
         <span class="oauth__link-text">
             Login with Twitter
-        </span>
-    </a>
-    <a class="oauth__button oauth_button_github" href="{{url_for('github_login')}}">
-        <span class="oauth__link-text">
-            Login with GitHub
         </span>
     </a>
 </div>

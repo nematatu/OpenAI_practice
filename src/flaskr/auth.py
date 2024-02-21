@@ -11,8 +11,66 @@ from flask import (
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 from flaskr.db import get_db
+from requests_oauthlib import OAuth1Session
+import urllib.parse as parse
+from dotenv import load_dotenv
+import os
+
+api_key = os.environ["TW_CLI_KEY"]
+api_secret = os.environ["TW_SCR_KEY"]
+# Twitter Endpoint
+twitter_base_url = 'https://api.twitter.com'
+authorization_endpoint = twitter_base_url + '/oauth/authenticate'
+request_token_endpoint = twitter_base_url + '/oauth/request_token'
+token_endpoint = twitter_base_url + '/oauth/access_token'
+credentials=twitter_base_url + '/1.1/account/verify_credentials.json'
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
+
+@bp.route("/twitter_login",methods=("GET","POST"))
+def twitter_login():
+    return "hello"
+    # if not resp.ok:
+    #     msg="Failed to fetch user info."+provider_name,
+    #     flash(msg,category="error")
+    #     return False
+    
+    # if blueprint is twitter_bp:
+    #     provider_user_id=resp.json()["id_str"]
+    #     provider_user_name=resp.json()["screen_name"]
+    
+    # select_oauth=(
+    #     f"SELECT * FROM oauth WHERE"
+    #     f"provider='{provider_name}' and"
+    #     f"provider_user_id='{provider_user_id}'"
+    # )
+    # db=get_db()
+    # cursor=db.cursor()
+    # oauth=cursor.execute(select_oauth).fetchone()
+
+    # if not oauth:
+    #     null = type(str(), tuple(), dict(__repr__=lambda self: 'null'))()
+    #     user=(null,provider_user_name,null)
+    #     insert_user=f"INSERT INTO user VALUES {user}"
+    #     cursor.execute(insert_user)
+    #     user_id=cursor.lastrowid
+
+    #     oauth=(null,user_id,provider_name,provider_user_id,token_string)
+    #     insert_oauth=f"INSERT INTO oauth VALUES {oauth}"
+    #     cursor.execute(insert_oauth)
+    #     db.commit()
+
+    #     session.clear()
+    #     session['user_id']=user_id
+
+    #     msg="Logged in successfully."+provider_name
+    #     flash(msg)
+    #     return False
+
+
+
+
+
 
 
 @bp.route("/register", methods=("GET", "POST"))

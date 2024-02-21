@@ -15,3 +15,12 @@ CREATE TABLE post(
     body TEXT NOT NULL,
     FOREIGN KEY (author_id) REFERENCES user (id)
 )
+
+CREATE TABLE oauth(
+    id INTERGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTERGER NOT NULL,
+    provider TEXT NOT NULL,
+    provider_user_id TEXT NOT NULL,
+    token TEXT NOT NULL,
+    FOREIGN KEY(user_id) PREFERENCESS user(id)
+    )
