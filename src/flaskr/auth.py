@@ -54,6 +54,8 @@ def twitter_login():
 
 @bp.route("/callback")
 def callback():
+    db = get_db()
+
     # 3.ユーザー認証/同意を行い、認可レスポンスを受け取る。
     oauth_verifier = request.args.get("oauth_verifier")
     oauth_token = request.args.get("oauth_token")
@@ -78,49 +80,23 @@ def callback():
     user_info = response.json()
 
     # ユーザー名とアイコンのURLを取得
-    username = user_info["screen_name"]
+    userid = user_info["screen_name"]
     icon_url = user_info["profile_image_url_https"]
     name = user_info["name"]
 
-    # return jsonify({'username':username,'icon_url':icon_url,'name':name})
-    return redirect(url_for("index"))
+    cur=db.execute(
+        'INSERT INTO user (userid,icon_url,name) VALUES (?,?,?)',
+        (userid,icon_url,name),
+    )
+    last_inserted_id=cur.lastrowid
+    db.execute(
+        'INSERT INTO oauth (user_id,identify_type,identifier,credential) VALUES (?,?,?,?)',
+        (last_inserted_id,"twitter",userid,access_token["oauth_token_secret"]),
+    )
+    db.commit()
 
-    # if not resp.ok:
-    #     msg="Failed to fetch user info."+provider_name,
-    #     flash(msg,category="error")
-    #     return False
-
-    # if blueprint is twitter_bp:
-    #     provider_user_id=resp.json()["id_str"]
-    #     provider_user_name=resp.json()["screen_name"]
-
-    # select_oauth=(
-    #     f"SELECT * FROM oauth WHERE"
-    #     f"provider='{provider_name}' and"
-    #     f"provider_user_id='{provider_user_id}'"
-    # )
-    # db=get_db()
-    # cursor=db.cursor()
-    # oauth=cursor.execute(select_oauth).fetchone()
-
-    # if not oauth:
-    #     null = type(str(), tuple(), dict(__repr__=lambda self: 'null'))()
-    #     user=(null,provider_user_name,null)
-    #     insert_user=f"INSERT INTO user VALUES {user}"
-    #     cursor.execute(insert_user)
-    #     user_id=cursor.lastrowid
-
-    #     oauth=(null,user_id,provider_name,provider_user_id,token_string)
-    #     insert_oauth=f"INSERT INTO oauth VALUES {oauth}"
-    #     cursor.execute(insert_oauth)
-    #     db.commit()
-
-    #     session.clear()
-    #     session['user_id']=user_id
-
-    #     msg="Logged in successfully."+provider_name
-    #     flash(msg)
-    #     return False
+    return {"userid": userid, "icon_url": icon_url, "name": name}
+    # return redirect(url_for("index"))
 
 
 @bp.route("/register", methods=("GET", "POST"))
@@ -139,8 +115,8 @@ def register():
         if error is None:
             try:
                 db.execute(
-                    "INSERT INTO user (username,password) VALUES (?,?)",
-                    (username, generate_password_hash(password)),
+                    "INSERT INTO oauth (identify_type,identifier,credential) VALUES (?,?,?)",
+                    ("user",username, generate_password_hash(password)),
                 )
                 db.commit()
             except db.IntegrityError:

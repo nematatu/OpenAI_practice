@@ -3,9 +3,19 @@ DROP TABLE IF EXISTS post;
 
 CREATE TABLE user(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT UNIQUE NOT NULL,
-    password TEXT NOT NULL
+    userid TEXT UNIQUE NOT NULL,
+    icon_url TEXT DEFAULT 'https://soco-st.com/wp-content/themes/socost/upload/18225_color.svg',
+    name TEXT NOT NULL
 );
+
+CREATE TABLE oauth(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTERGER,
+    identify_type TEXT NOT NULL,
+    identifier TEXT NOT NULL,
+    credential TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES user (id)
+    );
 
 CREATE TABLE post(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -15,12 +25,3 @@ CREATE TABLE post(
     body TEXT NOT NULL,
     FOREIGN KEY (author_id) REFERENCES user (id)
 )
-
-CREATE TABLE oauth(
-    id INTERGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTERGER NOT NULL,
-    provider TEXT NOT NULL,
-    provider_user_id TEXT NOT NULL,
-    token TEXT NOT NULL,
-    FOREIGN KEY(user_id) PREFERENCESS user(id)
-    )
